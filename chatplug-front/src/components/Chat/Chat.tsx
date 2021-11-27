@@ -40,14 +40,13 @@ const Chat = ({ location }: Props) => {
 
 
   useEffect(() => {
-    const {id, name , room} = location.state.data
+    const {id, room} = location.state.data
     setRoom(room);
     getUser(id).then((user) => setUser(user))
 
     socket = io(ENDPOINT);
 
     getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
-    console.log('PASS');
     socket.emit('join', {id, room});
 
     return () => {
@@ -83,16 +82,15 @@ const Chat = ({ location }: Props) => {
   if(user) {
     return (
       <div className="flex flex-col justify-between h-screen">
-        <section className="flex flex-col ">
+        <section className="flex flex-col fixed w-full">
           <h1 className="mx-auto text-2xl"> My chat plug</h1>
           <RoomInfo room={room} nbconnectedUsers={nbconnectedUsers}/>
         </section>
-        <section className="space-y-2">
-          <Messages messages={ messages } user={ user }/>
-          <div className="bottom-0">
-            <SendMessageBar message={message} setMessage={setMessage} sendMessage={sendMessage}/>
-          </div>
-          
+        <section className="flex flex-col-reverse mt-20 overflow-auto">
+          <Messages messages={ messages } user={ user }/>  
+        </section>
+        <section className="bottom-0">
+          <SendMessageBar message={message} setMessage={setMessage} sendMessage={sendMessage}/>
         </section>
       </div>
     )

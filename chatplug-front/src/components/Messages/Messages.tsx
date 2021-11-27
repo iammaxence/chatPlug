@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect }  from "react";
 import { User } from "../domain/user/User";
 import Message from './Message'
 
@@ -14,12 +14,22 @@ type Props = {
 }
 
 const Messages = ({ messages, user }: Props) => {
+
+  const scrollToBottom = () => {
+    document.getElementById('scrollToBottom')!.scrollIntoView({ behavior: "auto" })
+  }
+
+  useEffect(scrollToBottom, [messages]);
+
   return (
     <div className="overflow-auto mb-14">
-      { messages.map((message, index) =>
-      <div key={index}>
-        <Message message={ message } currentUser={ user }/>
-      </div>) }
+      {
+        messages.map((message, index) =>
+        <div key={index}>
+          <Message message={ message } currentUser={ user }/>
+        </div>)
+      }
+       <div id="scrollToBottom" />
     </div>
   )
 }
