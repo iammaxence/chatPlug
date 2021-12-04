@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../domain/user/User";
+import { User } from "../components/domain/user/User";
 
 /** Register user in database */
 const getUser = async (id: number) => {

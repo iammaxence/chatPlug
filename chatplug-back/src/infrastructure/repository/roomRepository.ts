@@ -1,5 +1,5 @@
-import models from '../db/setup/initModels';
-import { User } from "../domain/User";
+import models from '../../application/db/setup/initModels';
+import { User } from "../../domains/User";
 const { userRoomModel } = models;
 
 const joinRoom = async (roomId: number, userId:number) => {

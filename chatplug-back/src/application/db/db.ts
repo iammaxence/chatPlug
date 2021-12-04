@@ -1,8 +1,10 @@
 import { Sequelize } from 'sequelize';
-const config = require('../config');
+import config from '../../config';
+
+const { database_name, username, password } = config;
 
 // Connect to database
-const sequelize = new Sequelize(config.database_name, config.username, config.password, {
+const sequelize = new Sequelize(database_name, username, password, {
   host: config.host,
   dialect: 'mysql',
   define: {

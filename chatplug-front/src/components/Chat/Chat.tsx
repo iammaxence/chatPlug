@@ -4,8 +4,8 @@ import { User } from "../domain/user/User";
 import Messages from "../Messages/Messages";
 import RoomInfo from '../Room/RoomInfo';
 import SendMessageBar from "../SendMessageBar/SendMessageBar";
-import messageService from '../services/messageServices';
-import userRepository from '../services/userServices';
+import messageService from '../../services/messageServices';
+import userRepository from '../../services/userServices';
 
 const { getAllMessagesFromRoom } = messageService;
 const { getUser } = userRepository;

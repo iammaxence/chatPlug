@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../models/User";
 import models from '../db/setup/initModels';
-import userRepository from "../repository/userRepository";
+import userRepository from "../../infrastructure/repository/userRepository";
 
 const { userModel } = models;
 

@@ -1,6 +1,6 @@
-import models from '../db/setup/initModels';
-import Message from '../models/Message';
-import { User } from "../domain/User";
+import models from '../../application/db/setup/initModels';
+import { Message } from '../../domains/Message';
+import { User } from "../../domains/User";
 const { messageModel } = models;
 
 
@@ -10,7 +10,7 @@ const registerMessage = async (user: User, text: string ) => {
 
   const {id, date} = await messageModel.create(message)
   
-  return new Message(id, text, date);
+  return new Message(id, text, date, user);
 }
 
 export = {

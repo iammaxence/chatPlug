@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { Op } from "sequelize/types";
 import models from '../db/setup/initModels';
-import { Message } from "../domain/Message";
-import { User } from "../domain/User";
+import { Message } from "../../domains/Message";
+import { User } from "../../domains/User";
 
 const { messageModel, userRoomModel, userModel } = models;
 

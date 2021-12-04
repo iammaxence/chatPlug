@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Message } from "../domain/user/Message";
-import { User } from "../domain/user/User";
+import { Message } from "../components/domain/user/Message";
+import { User } from "../components/domain/user/User";
 
 /** Register user in database */
 const getAllMessagesFromRoom = async (roomId: number) => {
