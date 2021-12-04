@@ -48,16 +48,16 @@ const Chat = ({ location }: Props) => {
 
     getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
     socket.emit('join', {id, room});
-
+    console.log('EXECUTE 1 FOIS');
     return () => {
-      socket.disconnect();
-      //socket.off();
+      //socket.disconnect();
+      socket.off();
     }
 
   },[ENDPOINT, location.state.data])
 
   useEffect(() => {
-    socket.on('message', ({user, messageToSend}) => {
+    socket.once('message', ({user, messageToSend}) => {
       const {id, name, pseudo} = user;
       const userEmitter = new User(id, name, pseudo); 
       const { text, date } = messageToSend;
@@ -66,7 +66,7 @@ const Chat = ({ location }: Props) => {
       console.log('NEW MESSAGE : ', newMessage);
       setMessages([...messages, newMessage])
     })
-  }, [message, messages])
+  }, [messages])
 
   const sendMessage = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();

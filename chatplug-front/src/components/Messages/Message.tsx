@@ -14,8 +14,6 @@ type Props = {
 const Message = ({message: {user, text}, currentUser}: Props) => {
 
   const isSendByCurrentUser = () => {
-    console.log('CURRENT USER :', currentUser);
-    console.log(user.getName() ,'===', currentUser.getName());
     if(user.getId() === currentUser.getId()) {
       return (
         <div className="flex flex-col items-end mx-2" >
@@ -35,7 +33,6 @@ const Message = ({message: {user, text}, currentUser}: Props) => {
         </div>
       )
     } else {
-      console.log('else : ', user.getName());
       return (
         <div className="flex flex-col items-start mx-2" >
           <div>

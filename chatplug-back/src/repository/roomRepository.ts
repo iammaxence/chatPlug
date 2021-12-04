@@ -10,6 +10,21 @@ const joinRoom = async (roomId: number, userId:number) => {
 
 }
 
+const userHasJoinedRoom =  async (roomId: number, userId:number) => {
+  const userRoom = { roomId, userId}
+
+  const room = await userRoomModel.count({
+    where: {
+      roomId,
+      userId
+    }
+  })
+
+  return !!room; 
+}
+
+
 export = {
   joinRoom,
+  userHasJoinedRoom
 }

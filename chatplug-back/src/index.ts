@@ -61,7 +61,9 @@ io.on('connection', (socket: Socket) => {
 
     socket.join(room.id);
 
-    await roomRepository.joinRoom(room.id, user.getId());
+    const isAlreadyJoinRoom = await roomRepository.userHasJoinedRoom(room.id, user.getId());
+    if(!isAlreadyJoinRoom)
+      await roomRepository.joinRoom(room.id, user.getId());
   })
 
   socket.on('sendMessage', async ({userId, message, room}, callback) => {
