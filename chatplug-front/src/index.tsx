@@ -17,18 +17,23 @@ let initOptions = {
 
 let keycloak = Keycloak(initOptions);
 
-keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
+keycloak.init({ onLoad: initOptions.onLoad }).then(async (auth) => {
 
     if (!auth) {
         window.location.reload();
     } else {
-        console.log("Authenticated");
+        console.log("Keycloak Authenticated");
+
         var { email }: {email : String } = jwt_decode( keycloak.token!);
         
-        // check email exist
+        const isUserAlreadyExists = await userService.exists(email);
 
-        //else
-        userService.createUser({ email, pseudo: 'test'})
+        if(isUserAlreadyExists) {
+            console.log('Welcome '+ email);
+        }
+        else {
+            await userService.createUser({ email, pseudo: 'test'})
+        }
     }
     
     // I need to pass token here to register user

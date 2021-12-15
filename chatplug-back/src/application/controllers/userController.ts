@@ -33,7 +33,23 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   res.send(user);
 }
 
+const userExists = async (req: Request, res: Response, next: NextFunction) => {
+  //Validator on body
+  if(!req.query.email) throw new Error('Bad request exception : email is required');
+  
+  const email = req.query.email as unknown as string;
+
+  const userExists = await userRepository.userExists(email);
+  
+  //Presenter 
+
+  if(userExists > 0 ) res.send(true);
+
+  res.send(false);
+}
+
 export = {
   createUser,
   getUser,
+  userExists
 }

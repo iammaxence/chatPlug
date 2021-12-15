@@ -1,10 +1,12 @@
 import express from 'express';
-const { createUser, getUser }  = require('../controllers/userController');
+const { createUser, getUser, userExists  }  = require('../controllers/userController');
 
-const userRoutes = express.Router();
+const userRoute = express.Router();
 
-userRoutes.post('/createUser', createUser);
+userRoute.post('/createUser', createUser);
 
-userRoutes.get('/getUser', getUser);
+userRoute.get('/getUser', getUser);
 
-export = userRoutes;
+userRoute.get('/exists', userExists);
+
+export = userRoute;

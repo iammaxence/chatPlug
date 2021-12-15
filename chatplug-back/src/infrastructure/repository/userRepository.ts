@@ -8,6 +8,11 @@ const getUser = async (id: number) => {
   return new User(id, user.email, user.pseudo)
 }
 
+const userExists = (email: String) => {
+  return userModel.count({ where: {email}  });
+}
+
 export = {
   getUser,
+  userExists,
 }

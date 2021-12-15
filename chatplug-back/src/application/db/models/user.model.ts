@@ -10,6 +10,7 @@ const initUserModel = (sequelize: any) => sequelize.define("USER", {
   email: {
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true,
   },
   pseudo: {
     type: Sequelize.STRING,
