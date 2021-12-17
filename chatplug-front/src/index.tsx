@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import './index.css';
 
 // Authentication lib 
 import Keycloak, { KeycloakOnLoad } from 'keycloak-js';
@@ -7,8 +8,14 @@ import jwt_decode from "jwt-decode";
 // Main componenent
 import App from './App';
 
+//redux
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import userReducer from './reducer/userReducer';
+
 //services
 import allService from './services/index'
+import { User } from './components/domain/user/User';
 const { userService } = allService;
 
 let initOptions = {
@@ -17,27 +24,36 @@ let initOptions = {
 
 let keycloak = Keycloak(initOptions);
 
+const store = createStore(userReducer);
+
 keycloak.init({ onLoad: initOptions.onLoad }).then(async (auth) => {
+
+    let user: User|null = null;
 
     if (!auth) {
         window.location.reload();
     } else {
         console.log("Keycloak Authenticated");
 
-        var { email }: {email : String } = jwt_decode( keycloak.token!);
+        var { email }: {email : string } = jwt_decode( keycloak.token!);
         
         const isUserAlreadyExists = await userService.exists(email);
 
-        if(isUserAlreadyExists) {
-            console.log('Welcome '+ email);
+        if(!isUserAlreadyExists) {
+            console.log('Registration of user : '+ email);
+            await userService.createUser({ email, pseudo: 'test'})
         }
         else {
-            await userService.createUser({ email, pseudo: 'test'})
+            user = await userService.getUserByEmail(email);
         }
     }
     
-    // I need to pass token here to register user
-    ReactDOM.render(<App />, document.querySelector('#root'));
+    ReactDOM.render(
+        <Provider store={store}>
+            <App user={user}/>
+        </Provider>,
+        document.querySelector('#root')
+    );
 
     localStorage.setItem("react-token", keycloak.token!);
     localStorage.setItem("react-refresh-token", keycloak.refreshToken!);

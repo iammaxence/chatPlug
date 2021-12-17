@@ -5,10 +5,9 @@ import Messages from "../Messages/Messages";
 import RoomInfo from '../Room/RoomInfo';
 import SendMessageBar from "../SendMessageBar/SendMessageBar";
 import messageService from '../../services/message/messageServices';
-import userRepository from '../../services/user/userServices';
+import { useSelector } from "react-redux";
 
 const { getAllMessagesFromRoom } = messageService;
-const { getUser } = userRepository;
 
 type Props = {
   location: Location;
@@ -18,7 +17,7 @@ type Location = {
   pathName: string;
   search: string;
   hash: string;
-  state: {data: {id: number ,name: string, room: { id: number, name: string}}};
+  state: {data: {id: number, room: { id: number, name: string}}};
 }
 
 type TypeMessage = {
@@ -30,7 +29,7 @@ type TypeMessage = {
 let socket: Socket;
 
 const Chat = ({ location }: Props) => {
-  const [user, setUser] = useState<User>();
+  const user: User = useSelector((state: any) => state.user)
   const [room, setRoom] = useState<{id: number, name: string}>({id: 0, name:''});
   const [nbconnectedUsers, setConnectedUsers] = useState<number>(0)
   const [message, setMessage] =useState('');
@@ -40,23 +39,23 @@ const Chat = ({ location }: Props) => {
 
 
   useEffect(() => {
-    const {id, room} = location.state.data
+    const { room } = location.state.data
     setRoom(room);
-    getUser(id).then((user) => setUser(user))
+    const idUser = user.getId();
 
     socket = io(ENDPOINT);
 
     getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
-    socket.emit('join', {id, room});
+    socket.emit('join', {id: idUser, room});
     console.log('EXECUTE 1 FOIS');
     return () => {
       //socket.disconnect();
       socket.off();
     }
 
-  },[ENDPOINT, location.state.data])
+  },[ENDPOINT, user, location.state.data])
 
-  useEffect(() => {
+  useEffect(() => { 
     socket.once('message', ({user, messageToSend}) => {
       const {id, name, pseudo} = user;
       const userEmitter = new User(id, name, pseudo); 

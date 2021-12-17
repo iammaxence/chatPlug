@@ -1,7 +1,7 @@
 import axios from "axios";
 import { User } from "../../components/domain/user/User";
 
-/** Register user in database */
+/** get user in database */
 const getUser = async (id: number) => {
  
 const userResponse = await axios.get<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/getUser?id="+id);
@@ -9,6 +9,15 @@ const userResponse = await axios.get<{id: number, name: string, pseudo: string}>
 const {id: idUser, name, pseudo} = userResponse.data;
 
 return new User(idUser, name, pseudo);
+}
+
+
+const getUserByEmail = async (email: string) => {
+  const userResponse = await axios.get<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/getUserByEmail?email="+email);
+  
+  const {id: idUser, name, pseudo} = userResponse.data;
+  
+  return new User(idUser, name, pseudo);
 }
 
 /** Create user in database */
@@ -28,7 +37,7 @@ const createUser = async (userPayload: {email: String, pseudo: String}) => {
 /** user exists */
 
 const exists = async (email: String) => {
-  
+
   const {data: isUserAlreadyExists} = await axios.get<boolean>("http://localhost:8090/user/exists?email="+email);
 
   //add presenter
@@ -37,6 +46,7 @@ const exists = async (email: String) => {
 
 const services = {
   getUser,
+  getUserByEmail,
   createUser,
   exists,
 };
