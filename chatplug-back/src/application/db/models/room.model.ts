@@ -10,6 +10,7 @@ const initRoomModel = (sequelize: any) => sequelize.define("ROOM", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true,
   },
 }, 
 {

@@ -4,9 +4,12 @@ import { User } from "../domain/user/User";
 import Messages from "../Messages/Messages";
 import RoomInfo from '../Room/RoomInfo';
 import SendMessageBar from "../SendMessageBar/SendMessageBar";
-import messageService from '../../services/message/messageServices';
 import { useSelector } from "react-redux";
+import allServices from "../../services";
 
+const { roomService, messageService } = allServices;
+
+const { createRoom, getRoomByName } = roomService;
 const { getAllMessagesFromRoom } = messageService;
 
 type Props = {
@@ -17,7 +20,7 @@ type Location = {
   pathName: string;
   search: string;
   hash: string;
-  state: {data: {id: number, room: { id: number, name: string}}};
+  state: {data: {roomName: string}};
 }
 
 type TypeMessage = {
@@ -26,11 +29,17 @@ type TypeMessage = {
   date: string;
 }
 
+
+type TypeRoom = {
+  id: number,
+  name: string,
+} | null
+
 let socket: Socket;
 
 const Chat = ({ location }: Props) => {
   const user: User = useSelector((state: any) => state.user)
-  const [room, setRoom] = useState<{id: number, name: string}>({id: 0, name:''});
+  const [room, setRoom] = useState<TypeRoom>(null);
   const [nbconnectedUsers, setConnectedUsers] = useState<number>(0)
   const [message, setMessage] =useState('');
   const [messages, setMessages] = useState<TypeMessage[]>([]);
@@ -39,21 +48,41 @@ const Chat = ({ location }: Props) => {
 
 
   useEffect(() => {
-    const { room } = location.state.data
-    setRoom(room);
+    // Get or create Room
+    const { roomName } = location.state.data
+    async function getRoom () {
+      let room = await getRoomByName(roomName);
+
+      if(!room) {
+        room = await createRoom(roomName);
+      }
+      setRoom(room);
+    }
+
+    getRoom();
+  },[location.state.data])
+
+  useEffect(() => {
+   
+    //Get user
+   
     const idUser = user.getId();
 
+    // Get all the messages from a room
     socket = io(ENDPOINT);
 
-    getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
-    socket.emit('join', {id: idUser, room});
-    console.log('EXECUTE 1 FOIS');
+    if(room) {
+      getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
+      socket.emit('join', {id: idUser, room});
+    }
+    
+    // console.log('EXECUTE 1 FOIS');
     return () => {
       //socket.disconnect();
       socket.off();
     }
 
-  },[ENDPOINT, user, location.state.data])
+  },[ENDPOINT, user, room])
 
   useEffect(() => { 
     socket.once('message', ({user, messageToSend}) => {
@@ -78,7 +107,7 @@ const Chat = ({ location }: Props) => {
   
   console.log('CHAT :', message, messages);
 
-  if(user) {
+  if(user && room) {
     return (
       <div className="flex flex-col justify-between h-screen">
         <section className="flex flex-col fixed w-full">

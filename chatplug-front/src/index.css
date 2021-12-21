@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "Bodo";
+  font-weight: 400;
+  src: local("Bodo"), url(./fonts/Bodo_Amat.ttf);
+} ;
