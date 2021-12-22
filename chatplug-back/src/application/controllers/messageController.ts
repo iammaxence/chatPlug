@@ -9,8 +9,8 @@ const { messageModel, userRoomModel, userModel } = models;
 const createMessage = async (req: Request, res: Response, next: NextFunction) => {
   //Validator on body
 
-  const { userId, text } = req.body;
-  const message = { userId, text, date: new Date()}
+  const { userId, roomId, text } = req.body;
+  const message = { userId, roomId, text, date: new Date()}
 
   const responseMessage = await messageModel.create(message)
     .catch((err: Error) => {
@@ -27,14 +27,14 @@ const getAllMessagesFromRoom = async (req: Request, res: Response, next: NextFun
   //Validator on body
 
   const { roomId } = req.query;
-  
+
   const allUsersIdsInTheRoom = (await userRoomModel.findAll({
     where: { roomId },
     attributes: ['userId']
   })).map(({userId}: {userId: number}) => userId);
 
   const allMessagesFromRoom = (await messageModel.findAll({
-    where: { userId : allUsersIdsInTheRoom },
+    where: { roomId },
     include: {
       model: userModel,
       as: 'user',
@@ -43,7 +43,7 @@ const getAllMessagesFromRoom = async (req: Request, res: Response, next: NextFun
   })).map(({id, text, date, user}: { id: number, text: string, date: Date, user: {id: number, email: string, pseudo: string}}) => {
     const { id: userId, email, pseudo } = user
     const userFromDomain = new User(userId, email, pseudo);
-
+  
     return new Message(id, text, date, userFromDomain)
   });
   

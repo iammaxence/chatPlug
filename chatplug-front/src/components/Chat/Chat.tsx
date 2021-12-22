@@ -6,6 +6,7 @@ import RoomInfo from '../Room/RoomInfo';
 import SendMessageBar from "../SendMessageBar/SendMessageBar";
 import { useSelector } from "react-redux";
 import allServices from "../../services";
+import { Room } from "../domain/user/Room";
 
 const { roomService, messageService } = allServices;
 
@@ -30,16 +31,16 @@ type TypeMessage = {
 }
 
 
-type TypeRoom = {
-  id: number,
-  name: string,
-} | null
+// type TypeRoom = {
+//   id: number,
+//   name: string,
+// } | null
 
 let socket: Socket;
 
 const Chat = ({ location }: Props) => {
   const user: User = useSelector((state: any) => state.user)
-  const [room, setRoom] = useState<TypeRoom>(null);
+  const [room, setRoom] = useState<Room|null>(null);
   const [nbconnectedUsers, setConnectedUsers] = useState<number>(0)
   const [message, setMessage] =useState('');
   const [messages, setMessages] = useState<TypeMessage[]>([]);
@@ -56,6 +57,7 @@ const Chat = ({ location }: Props) => {
       if(!room) {
         room = await createRoom(roomName);
       }
+      console.log('USE EFFECT ROOM : ', room);
       setRoom(room);
     }
 
@@ -65,14 +67,15 @@ const Chat = ({ location }: Props) => {
   useEffect(() => {
    
     //Get user
-   
-    const idUser = user.getId();
-
+    let idUser = -1;
+    if(user) {
+      idUser = user.getId();
+    }
     // Get all the messages from a room
     socket = io(ENDPOINT);
 
     if(room) {
-      getAllMessagesFromRoom(room.id).then((allMessages: any) => setMessages(allMessages));
+      getAllMessagesFromRoom(room.getId()).then((allMessages: any) => setMessages(allMessages));
       socket.emit('join', {id: idUser, room});
     }
     
@@ -89,7 +92,7 @@ const Chat = ({ location }: Props) => {
       const {id, name, pseudo} = user;
       const userEmitter = new User(id, name, pseudo); 
       const { text, date } = messageToSend;
-
+    
       const newMessage = {user: userEmitter, text, date};
       console.log('NEW MESSAGE : ', newMessage);
       setMessages([...messages, newMessage])

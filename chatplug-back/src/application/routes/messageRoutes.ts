@@ -3,7 +3,7 @@ const { createMessage, getAllMessagesFromRoom }  = require('../controllers/messa
 
 const messageRoute = express.Router();
 
-messageRoute.post('/createMessage', createMessage);
+messageRoute.post('/create-message', createMessage);
 
 messageRoute.get('/room-messages', getAllMessagesFromRoom);
 

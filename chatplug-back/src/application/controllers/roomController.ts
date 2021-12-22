@@ -5,11 +5,10 @@ const { roomModel, userRoomModel } = models;
 
 const createRoom = async (req: Request, res: Response, next: NextFunction) => {
   //Validator on body
+  if(!req.body.roomName) throw new Error('Bad request exception : roomName is required');
+  const { roomName } = req.body;
 
-  const { name } = req.body;
-  const room = { name }
-
-  const responseRoom = await roomModel.create(room)
+  const responseRoom = await roomModel.create({ name: roomName })
     .catch((err: Error) => {
     res.status(500).send({
       message:
@@ -37,7 +36,19 @@ const joinRoom = async (req: Request, res: Response, next: NextFunction) => {
   res.send(responseRoom);
 }
 
+const findRoom = async (req: Request, res: Response, next: NextFunction) => {
+  //Validator on body
+  if(!req.query.roomName) throw new Error('Bad request exception : roomName is required');
+
+  const { roomName } = req.query;
+
+  const room = await roomModel.findOne({ where : { name: roomName } });
+  
+  return res.send(room);
+} 
+
 export = {
   createRoom,
   joinRoom,
+  findRoom,
 }

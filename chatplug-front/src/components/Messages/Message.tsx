@@ -20,7 +20,7 @@ const Message = ({message: {user, text}, currentUser}: Props) => {
         <div>
           <p> { user.getPseudo() } </p>
         </div>
-        <div className="flex flex-col p-2 rounded-lg rounded-br-none bg-blue-400 text-white" >
+        <div className="flex flex-col p-2 rounded-lg rounded-br-none bg-blue-300 text-black" >
           <p> { text } </p>
         </div>
       </div>
@@ -38,7 +38,7 @@ const Message = ({message: {user, text}, currentUser}: Props) => {
           <div>
             <p> { user.getPseudo() } </p>
           </div>
-          <div className="flex flex-col p-2 rounded-lg rounded-bl-none bg-gray-300 text-gray-600" >
+          <div className="flex flex-col p-2 rounded-lg rounded-bl-none bg-gray-300 text-black" >
             <p> { text } </p>
           </div>
         </div>
