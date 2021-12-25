@@ -1,5 +1,6 @@
 import models from '../../application/db/setup/initModels';
 import { User } from "../../domains/User";
+import { UserUseCaseDto } from '../../domains/user/dto/UserUseCaseDto';
 const { userModel } = models;
 
 const getUser = async (id: number) => {
@@ -20,8 +21,14 @@ const userExists = (email: String) => {
   return userModel.count({ where: {email}  });
 }
 
+const createUser = async (email: string, pseudo: string, status='PENDING'): Promise<UserUseCaseDto> => {
+  const createdUser:{ id: number, pseudo: string, status: string } = await userModel.create({ email, pseudo, status });
+  return UserUseCaseDto.toDto(createdUser);
+}
+
 export = {
   getUser,
   getUserByEmail,
   userExists,
+  createUser,
 }
