@@ -1,16 +1,22 @@
+import { ErrorAdapter } from "../../../../common/ErrorAdapter";
 import { UseCase } from "../../../../common/UseCase";
 import userRepository from "../../../../infrastructure/repository/userRepository";
 import { UserUseCaseDto } from "../../dto/UserUseCaseDto";
 import { CreateUserPort } from "../../port/CreateUserPort";
+import { CreateUserUseCaseResponse } from "./CreateUserUseCaseResponse";
 
 export class CreateUserUseCase implements UseCase<CreateUserPort, UserUseCaseDto> {
 
-    execute(port?: CreateUserPort): Promise<UserUseCaseDto> {
+    async execute(port?: CreateUserPort): Promise<CreateUserUseCaseResponse> {
+        const { email , pseudo , status } = port!;
 
-        if(!port) throw new Error('Parameters error for created user');
-
-        const { email , pseudo , status } = port;
-
-        return userRepository.createUser(email, pseudo, status);
+        if(!email || !pseudo) {
+            const status_code = 400 
+            const error_message =  ErrorAdapter.parameters(CreateUserUseCase.name, [email, pseudo, status]);
+            return new CreateUserUseCaseResponse({status_code, error_message})
+        }
+        const createdUser = await userRepository.createUser(email, pseudo, status);
+              
+        return new CreateUserUseCaseResponse({ createdUser })
     }
 }

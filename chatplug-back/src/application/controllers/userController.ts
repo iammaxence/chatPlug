@@ -2,7 +2,7 @@ import {Request, Response } from "express";
 import models from '../db/setup/initModels';
 import { CreateUserUseCase } from "../../domains/user/useCase/createUserUseCase/CreateUserUseCase";
 import { CreateUserAdapter } from "../../infrastructure/adapter/user/createUserAdapter/CreateUserAdapter";
-import { UserUseCaseDto } from "../../domains/user/dto/UserUseCaseDto";
+import { CreateUserUseCaseResponse } from "../../domains/user/useCase/createUserUseCase/CreateUserUseCaseResponse";
 
 const { userModel } = models;
 
@@ -23,10 +23,14 @@ export class UserController {
       status: body.status,
     });
 
-    const createdUser: UserUseCaseDto = await this.createUserUseCase.execute(adapter);
+    const response: CreateUserUseCaseResponse = await this.createUserUseCase.execute(adapter);
 
-    return res.send(createdUser);
-    // return CoreApiResponse.success(createdUser);
+    if(response.status_code !== 200)
+      return  res
+              .status(response.status_code)
+              .send(response.error_message);
+
+    return res.send(response.createdUser);
   }
 
   public async getUser (req: Request, res: Response) {}

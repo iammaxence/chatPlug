@@ -10,4 +10,5 @@ export class CreateUserAdapter implements CreateUserPort{
         this.pseudo = pseudo;
         this.status = status;
     }
+
 }
