@@ -1,7 +1,8 @@
+import { UseCaseResponse } from "../../../../common/UseCaseResponse";
 import { User } from "../../../User";
 import { UserUseCaseDto } from "../../dto/UserUseCaseDto";
 
-export class CreateUserUseCaseResponse {
+export class CreateUserUseCaseResponse implements UseCaseResponse {
     status_code: number;
     createdUser: UserUseCaseDto|null;
     error_message: string|null;

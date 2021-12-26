@@ -1,10 +1,21 @@
-//controller
+import { ResponseHandler } from "../../common/ResponseHandler";
 import { CreateUserUseCase } from "../../domains/user/useCase/createUserUseCase/CreateUserUseCase";
+import { GetUserUseCase } from "../../domains/user/useCase/getUserUseCase/GetUserUsecase";
 import { UserController } from "./UserController";
 
-//user case
+//Response handler
+const responseHandler = new ResponseHandler();
 
-const userController = new UserController(new CreateUserUseCase);
+//user use case
+const createUserUseCase = new CreateUserUseCase();
+const getUserUseCase = new GetUserUseCase();
+
+// Controller
+const userController = new UserController(
+    responseHandler,
+    createUserUseCase,
+    getUserUseCase
+);
 
 export = {
     userController,

@@ -11,7 +11,9 @@ userRoute.post('/create-user', (req: Request, res: Response, next: NextFunction)
    return userController.createUser(req, res);
 });
 
-userRoute.get('/getUser', userController.getUser);
+userRoute.get('/get-user', (req: Request, res: Response, next: NextFunction) => {
+   return userController.getUser(req, res);
+});
 
 userRoute.get('/getUserByEmail', userController.getUserByEmail);
 

@@ -47,8 +47,8 @@ export class SocketIoConfiguration {
             console.log('user : ', user);
             const userAdmin = new User(0, 'admin', 'admin');
         
-            socket.emit('message', {user: userAdmin, messageToSend: `welcome ${user.getName()} to ${room.getName()}`})
-            socket.broadcast.to(room.getId().toString()).emit('message', { user: userAdmin, messageToSend: `${user.getName()} has joined`})
+            socket.emit('message', {user: userAdmin, messageToSend: `welcome ${user.getPseudo()} to ${room.getName()}`})
+            socket.broadcast.to(room.getId().toString()).emit('message', { user: userAdmin, messageToSend: `${user.getPseudo()} has joined`})
         
             socket.join(room.getId().toString());
         

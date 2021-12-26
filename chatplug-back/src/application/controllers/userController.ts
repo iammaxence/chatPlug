@@ -3,37 +3,48 @@ import models from '../db/setup/initModels';
 import { CreateUserUseCase } from "../../domains/user/useCase/createUserUseCase/CreateUserUseCase";
 import { CreateUserAdapter } from "../../infrastructure/adapter/user/createUserAdapter/CreateUserAdapter";
 import { CreateUserUseCaseResponse } from "../../domains/user/useCase/createUserUseCase/CreateUserUseCaseResponse";
+import { ResponseHandler } from "../../common/ResponseHandler";
+import { GetUserAdapter } from "../../infrastructure/adapter/user/getUserAdapter/GetUserAdapter";
+import { GetUserUseCaseResponse } from "../../domains/user/useCase/getUserUseCase/GetuserUseCaseResponse";
+import { GetUserUseCase } from "../../domains/user/useCase/getUserUseCase/GetUserUsecase";
 
 const { userModel } = models;
 
 export class UserController {
-  createUserUseCase:CreateUserUseCase;
+  responseHandler: ResponseHandler;
+  createUserUseCase: CreateUserUseCase;
+  getUserUseCase: GetUserUseCase;
 
-  constructor(createUserUseCase: CreateUserUseCase) {
+  constructor(responseHandler: ResponseHandler,createUserUseCase: CreateUserUseCase, getUserUseCase: GetUserUseCase) {
+    this.responseHandler = responseHandler;
     this.createUserUseCase = createUserUseCase;
+    this.getUserUseCase = getUserUseCase;
   }
 
 
   public async createUser (req: Request, res: Response) {
 
-    const { body } = req;
-    const adapter: CreateUserAdapter = new CreateUserAdapter({
-      email: body.email,
-      pseudo: body.pseudo,
-      status: body.status,
-    });
+    const adapter: CreateUserAdapter = new CreateUserAdapter(req.body);
 
     const response: CreateUserUseCaseResponse = await this.createUserUseCase.execute(adapter);
 
     if(response.status_code !== 200)
-      return  res
-              .status(response.status_code)
-              .send(response.error_message);
+      return this.responseHandler.error(res, response);
 
     return res.send(response.createdUser);
   }
 
-  public async getUser (req: Request, res: Response) {}
+  public async getUser (req: Request, res: Response) {
+
+    const adapter: GetUserAdapter = new GetUserAdapter({ id: req.query.id as string });
+
+    const response: GetUserUseCaseResponse = await this.getUserUseCase.execute(adapter);
+
+    if(response.status_code !== 200)
+      return this.responseHandler.error(res, response);
+
+    return res.send(response.getUser);
+  }
   
   public async getUserByEmail (req: Request, res: Response) {}
 
