@@ -7,18 +7,32 @@ import { ResponseHandler } from "../../common/ResponseHandler";
 import { GetUserAdapter } from "../../infrastructure/adapter/user/getUserAdapter/GetUserAdapter";
 import { GetUserUseCaseResponse } from "../../domains/user/useCase/getUserUseCase/GetuserUseCaseResponse";
 import { GetUserUseCase } from "../../domains/user/useCase/getUserUseCase/GetUserUsecase";
-
-const { userModel } = models;
+import { GetUserByEmailAdapter } from "../../infrastructure/adapter/user/getUserByEmailAdapter/GetUserByEmailAdapter";
+import { GetUserByEmailUseCaseResponse } from "../../domains/user/useCase/getUserByEmailUseCase/GetUserUseCaseByEmailResponse";
+import { UserExistsUseCaseResponse } from "../../domains/user/useCase/userExistsUseCase/UserExistsUseCaseResponse";
+import { GetUserByEmailUseCase } from "../../domains/user/useCase/getUserByEmailUseCase/GetUserByEmailUseCase";
+import { UserExistsAdapter } from "../../infrastructure/adapter/user/userExistsAdapter/UserExistsAdapter";
+import { UserExistsUseCase } from "../../domains/user/useCase/userExistsUseCase/UserExistsUseCase";
 
 export class UserController {
   responseHandler: ResponseHandler;
   createUserUseCase: CreateUserUseCase;
   getUserUseCase: GetUserUseCase;
+  getUserByEmailUseCase: GetUserByEmailUseCase;
+  userExistsUseCase: UserExistsUseCase;
 
-  constructor(responseHandler: ResponseHandler,createUserUseCase: CreateUserUseCase, getUserUseCase: GetUserUseCase) {
+  constructor(
+    responseHandler: ResponseHandler,
+    createUserUseCase: CreateUserUseCase,
+    getUserUseCase: GetUserUseCase,
+    getUserByEmailUseCase: GetUserByEmailUseCase,
+    userExistsUseCase: UserExistsUseCase
+    ) {
     this.responseHandler = responseHandler;
     this.createUserUseCase = createUserUseCase;
     this.getUserUseCase = getUserUseCase;
+    this.getUserByEmailUseCase = getUserByEmailUseCase;
+    this.userExistsUseCase = userExistsUseCase;
   }
 
 
@@ -46,69 +60,29 @@ export class UserController {
     return res.send(response.getUser);
   }
   
-  public async getUserByEmail (req: Request, res: Response) {}
+  public async getUserByEmail (req: Request, res: Response) {
+    
+    const adapter: GetUserByEmailAdapter = new GetUserByEmailAdapter({ email: req.query.email as string});
+   
+    const response: GetUserByEmailUseCaseResponse = await this.getUserByEmailUseCase.execute(adapter);
+    
+    if(response.status_code !== 200)
+      return this.responseHandler.error(res, response);
 
-  public async userExists (req: Request, res: Response) {}
+    return res.send(response.getUserByEmail);
+  }
+
+  public async userExists (req: Request, res: Response) {
+
+    const adapter: UserExistsAdapter = new UserExistsAdapter({ email: req.query.email as string});
+
+    const response: UserExistsUseCaseResponse = await this.userExistsUseCase.execute(adapter);
+    
+    if(response.status_code !== 200)
+      return this.responseHandler.error(res, response);
+    
+      return res.send(response.userExists);
+
+  }
 
 }
-
-// const createUser = async (req: Request, res: Response, next: NextFunction) => {
-//   //Validator on body
-
-//   //User to create
-//   const {email, pseudo, status} = req.body;
-
-//   // Save Tutorial in the database
-//   userModel.create({ email, pseudo, status })
-//     .then((data: any) => {
-//       //Presenter 
-//       return res.send(data);
-//     })
-//     .catch((err: Error) => {
-//       return res.status(500).send({
-//         message:
-//           err.message || "Some error occurred while creating the User."
-//       });
-//     });
-
-// }
-
-// const getUser = async (req: Request, res: Response, next: NextFunction) => {
-//   console.log('QUERY PARAM : ', req.query);
-//   if(!req.query.id) throw new Error('Bad request exception : id is required');
-
-//   const id = +req.query.id
-//   const user = await userRepository.getUser(id);
-
-//   return res.send(user);
-// }
-
-// const getUserByEmail = async (req: Request, res: Response, next: NextFunction) => {
-//   if(!req.query.email) throw new Error('Bad request exception : email is required');
-
-//   const email = req.query.email as unknown as string;
-//   const user = await userRepository.getUserByEmail(email);
-
-//   return res.send(user);
-// }
-
-// const userExists = async (req: Request, res: Response, next: NextFunction) => {
-//   //Validator on body
-//   if(!req.query.email) throw new Error('Bad request exception : email is required');
-
-//   const email = req.query.email as unknown as string;
-
-//   const userExists = await userRepository.userExists(email);
-//   //Presenter 
-
-//   if(userExists > 0 ) return res.send(true);
-
-//   return res.send(false);
-// }
-
-// export = {
-//   createUser,
-//   getUser,
-//   getUserByEmail,
-//   userExists
-// }

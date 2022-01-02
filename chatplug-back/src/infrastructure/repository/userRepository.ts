@@ -3,23 +3,24 @@ import { User } from "../../domains/User";
 import { UserUseCaseDto } from '../../domains/user/dto/UserUseCaseDto';
 const { userModel } = models;
 
-const getUser = async (id: number) => {
+const getUser = async (id: number): Promise<User> => {
   const user = await userModel.findOne({ where : { id } });
   return UserUseCaseDto.toDto(user);
 }
 
-const getUserByEmail = async (email: string) => {
-  const user = await userModel.findOne({ where : { email } });
-  if(!user) throw new Error(`Bad request exception : User ${email} doesnt exists`);
-
-  return new User(user.id, email, user.pseudo)
+const getUserByEmail = async (email: string): Promise<User> => {
+  console.log('email : ', email);
+  const user:{id: number, pseudo: string, status: string} = await userModel.findOne({ where : { email } });
+  console.log('user by email : ', user);
+  return UserUseCaseDto.toDto(user);
 }
 
-const userExists = (email: String) => {
-  return userModel.count({ where: {email}  });
+const userExists = async (email: String): Promise<boolean> => {
+  const doesUserExists =  await userModel.count({ where: {email}  });
+  return !!doesUserExists;
 }
 
-const createUser = async (email: string, pseudo: string, status='PENDING'): Promise<UserUseCaseDto> => {
+const createUser = async (email: string, pseudo: string, status='PENDING'): Promise<User> => {
   const createdUser:{ id: number, pseudo: string, status: string } = await userModel.create({ email, pseudo, status });
   return UserUseCaseDto.toDto(createdUser);
 }
