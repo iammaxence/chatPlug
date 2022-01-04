@@ -2,7 +2,10 @@ import { User } from "../../User";
 
 export class UserUseCaseDto {
 
-    public static toDto({id, pseudo, status}: {id: number, pseudo: string, status: string}){
+    public static toDto(user: {id: number, pseudo: string, status: string}){
+        if (!user) return null;
+        const {id, pseudo, status} = user;
+        
         return new User(id, pseudo, status);
     }
 }

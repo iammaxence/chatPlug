@@ -42,6 +42,8 @@ export class SocketIoConfiguration {
         socket.on('join', async ({id, room: roomData}) => {
           
             const user = await getUser(id);
+            if(!user) throw new Error(`User ${id} does not exists : It should not append`);
+            
             const room = await findRoom(roomData.name);
         
             console.log('user : ', user);
@@ -62,6 +64,8 @@ export class SocketIoConfiguration {
         socket.on('sendMessage', async ({userId, message, room: roomData}, callback) => {
 
             const user = await getUser(userId);
+            if(!user) throw new Error(`User ${userId} does not exists : It should not append`);
+
             const room = await findRoom(roomData.name);
 
             console.log('user sending message : ', user);
