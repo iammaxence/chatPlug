@@ -6,7 +6,7 @@ export class ResponseHandler {
 
     error(res: Response , response: UseCaseResponse) {
         return res
-        .sendStatus(response.status_code)
+        .status(response.status_code)
         .send(response.error_message);
     }
 }

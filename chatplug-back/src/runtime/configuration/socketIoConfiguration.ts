@@ -2,13 +2,12 @@ import { Socket } from "../../../node_modules/socket.io/dist";
 import { User } from "../../domains/User";
 import userRepository from "../../infrastructure/repository/userRepository";
 import messageRepository from "../../infrastructure/repository/messageRepository";
-import roomRepository from "../../infrastructure/repository/roomRepository";
 import { Server } from "http";
 import { Server as SocketIoServer } from "socket.io";
+import { RoomRepository } from "../../infrastructure/repository/RoomRepository";
 
 const { getUser } = userRepository;
 const { registerMessage } = messageRepository;
-const { findRoom } = roomRepository
 
 export class SocketIoConfiguration {
     private server: Server;
@@ -44,7 +43,7 @@ export class SocketIoConfiguration {
             const user = await getUser(id);
             if(!user) throw new Error(`User ${id} does not exists : It should not append`);
             
-            const room = await findRoom(roomData.name);
+            const room = await RoomRepository.findRoom(roomData.name);
         
             console.log('user : ', user);
             const userAdmin = new User(0, 'admin', 'admin');
@@ -54,9 +53,9 @@ export class SocketIoConfiguration {
         
             socket.join(room.getId().toString());
         
-            const isAlreadyJoinRoom = await roomRepository.userHasJoinedRoom(room.getId(), user.getId());
+            const isAlreadyJoinRoom = await RoomRepository.userHasJoinedRoom(room.getId(), user.getId());
             if(!isAlreadyJoinRoom)
-              await roomRepository.joinRoom(room.getId(), user.getId());
+              await RoomRepository.joinRoom(room.getId(), user.getId());
         })
     }
 
@@ -66,7 +65,7 @@ export class SocketIoConfiguration {
             const user = await getUser(userId);
             if(!user) throw new Error(`User ${userId} does not exists : It should not append`);
 
-            const room = await findRoom(roomData.name);
+            const room = await RoomRepository.findRoom(roomData.name);
 
             console.log('user sending message : ', user);
             const messageToSend = await registerMessage(user, room, message);
