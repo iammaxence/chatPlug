@@ -2,18 +2,24 @@ import { Request, Response } from "express";
 import { ResponseHandler } from "../../common/ResponseHandler";
 import { CreateRoomUseCase } from "../../domains/room/useCase/CreateRoomUseCase.ts/CreateRoomUseCase";
 import { CreateRoomUseCaseResponse } from "../../domains/room/useCase/CreateRoomUseCase.ts/CreateRoomUseCaseResponse";
-import { CreateRoomAdapter } from "../../infrastructure/adapter/room/createRoomAdapter/createRoomAdapter";
+import { JoinRoomUseCase } from "../../domains/room/useCase/joinRoomUseCase/JoinRoomUseCase";
+import { JoinRoomUseCaseResponse } from "../../domains/room/useCase/joinRoomUseCase/JoinRoomUseCaseResponse";
+import { CreateRoomAdapter } from "../../infrastructure/adapter/room/createRoomAdapter/CreateRoomAdapter";
+import { JoinRoomAdapter } from "../../infrastructure/adapter/room/joinRoomAdapter/JoinRoomAdapter";
 
 export class RoomController {
   responseHandler: ResponseHandler;
   createRoomUseCase: CreateRoomUseCase;
+  joinRoomUseCase: JoinRoomUseCase;
 
   constructor(
     responseHandler: ResponseHandler,
     createRoomUseCase: CreateRoomUseCase,
+    joinRoomUseCase: JoinRoomUseCase,
   ){
     this.responseHandler = responseHandler;
     this.createRoomUseCase = createRoomUseCase;
+    this.joinRoomUseCase = joinRoomUseCase;
   }
 
   public async createRoom(req: Request, res: Response) {
@@ -28,41 +34,18 @@ export class RoomController {
     return res.send(response.createdRoom);
   }
 
+  public async joinRoom(req: Request, res: Response) {
+    const adapter: JoinRoomAdapter = new JoinRoomAdapter(req.body);
+
+    const response: JoinRoomUseCaseResponse = await this.joinRoomUseCase.execute(adapter);
+
+    if(response.status_code !== 200)
+    return this.responseHandler.error(res, response);
+
+    return res.send(response.joinRoom);
+  }
+
 }
-// const { roomModel, userRoomModel } = models;
-
-// const createRoom = async (req: Request, res: Response, next: NextFunction) => {
-//   //Validator on body
-//   if(!req.body.roomName) throw new Error('Bad request exception : roomName is required');
-//   const { roomName } = req.body;
-
-//   const responseRoom = await roomModel.create({ name: roomName })
-//     .catch((err: Error) => {
-//     res.status(500).send({
-//       message:
-//         err.message || "Some error occurred while creating a room."
-//     });
-//   });;
-  
-//   res.send(responseRoom);
-// }
-
-// const joinRoom = async (req: Request, res: Response, next: NextFunction) => {
-//   //Validator on body
-
-//   const { roomId, userId } = req.body;
-//   const userRoom = { roomId, userId}
-
-//   const responseRoom = await userRoomModel.create(userRoom)
-//     .catch((err: Error) => {
-//     res.status(500).send({
-//       message:
-//         err.message || "Some error occurred while user joining room"
-//     });
-//   });;
-  
-//   res.send(responseRoom);
-// }
 
 // const findRoom = async (req: Request, res: Response, next: NextFunction) => {
 //   //Validator on body

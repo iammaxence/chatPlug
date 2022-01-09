@@ -6,36 +6,34 @@ const { userRoomModel, roomModel } = models;
 
 export class RoomRepository {
 
-  public static async createRoom(roomName: string) {
+  public async createRoom(roomName: string) {
     const responseRoom = await roomModel.create({ name: roomName });
     
     return RoomUseCaseDto.toDto(responseRoom);
   }
 
-  public static async joinRoom(roomId: number, userId:number) {
+  public async joinRoom(roomId: number, userId:number) {
+    const [room, created] = await userRoomModel.findOrCreate({ where: { roomId, userId }});
     
-    return;
+    return created;
   }
 
-  public static async findRoom(roomName: string) {
+  public async roomExistsById(id: number) {
+    const room = await roomModel.count({ where: {id}});
+    return !!room;
+  }
+
+  public async findRoom(roomName: string) {
     
     return new Room(1, 'mock');
   }
 
-  public static async userHasJoinedRoom(roomId: number, userId:number) {
+  public async userHasJoinedRoom(roomId: number, userId:number) {
     
     return true;
   }
 
 }
-
-// const joinRoom = async (roomId: number, userId:number) => {
-//   const userRoom = { roomId, userId}
-
-//   const room = await userRoomModel.create(userRoom)
-//   if(!room) throw new Error(`Bad request exception : RoomId ${roomId} or UserId ${userId} doesnt exists`);
-
-// }
 
 // const userHasJoinedRoom =  async (roomId: number, userId:number) => {
 //   const userRoom = { roomId, userId}
@@ -54,11 +52,4 @@ export class RoomRepository {
 
 //   const room = await roomModel.findOne({ where : { name: roomName } });
 //   return new Room(room.id, room.name);
-// }
-
-
-// export = {
-//   joinRoom,
-//   userHasJoinedRoom,
-//   findRoom,
 // }

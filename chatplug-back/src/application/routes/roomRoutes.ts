@@ -8,9 +8,11 @@ const { roomController } = controllers;
 
 roomRoute.post('/create-room', (req: Request, res: Response, next: NextFunction) => {
     return roomController.createRoom(req, res);
- });
+});
 
-// roomRoute.post('/join', joinRoom);
+roomRoute.post('/join-room', (req: Request, res: Response, next: NextFunction) => {
+    return roomController.joinRoom(req, res);
+});
 
 // roomRoute.get('/get-room', findRoom);
 

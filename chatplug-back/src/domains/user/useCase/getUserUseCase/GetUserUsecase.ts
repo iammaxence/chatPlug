@@ -1,10 +1,15 @@
 import { ErrorAdapter } from "../../../../common/ErrorAdapter";
 import { UseCase } from "../../../../common/UseCase";
-import userRepository from "../../../../infrastructure/repository/userRepository";
+import { UserRepository } from "../../../../infrastructure/repository/UserRepository";
 import { GetUserPort } from "../../port/GetUserPort";
 import { GetUserUseCaseResponse } from "./GetuserUseCaseResponse";
 
 export class GetUserUseCase implements UseCase<GetUserPort,GetUserUseCaseResponse> {
+    userRepository: UserRepository;
+
+    constructor(userRepository: UserRepository){
+        this.userRepository = userRepository;
+    }
     async execute(port?: GetUserPort): Promise<GetUserUseCaseResponse> {
         const { id } = port!;
 
@@ -13,7 +18,7 @@ export class GetUserUseCase implements UseCase<GetUserPort,GetUserUseCaseRespons
             const error_message =  ErrorAdapter.parameters(GetUserUseCase.name, [id]);
             return new GetUserUseCaseResponse({status_code, error_message})
         }
-        const getUser = await userRepository.getUser(id);
+        const getUser = await this.userRepository.getUser(id);
               
         return new GetUserUseCaseResponse({ getUser })
     }
