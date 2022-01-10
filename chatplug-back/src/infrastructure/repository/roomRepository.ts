@@ -24,8 +24,8 @@ export class RoomRepository {
   }
 
   public async findRoom(roomName: string) {
-    
-    return new Room(1, 'mock');
+    const responseRoom = await roomModel.findOne({ where : { name: roomName } });
+    return RoomUseCaseDto.toDto(responseRoom);
   }
 
   public async userHasJoinedRoom(roomId: number, userId:number) {
@@ -46,10 +46,4 @@ export class RoomRepository {
 //   })
 
 //   return !!room; 
-// }
-
-// const findRoom = async (roomName: string) => {
-
-//   const room = await roomModel.findOne({ where : { name: roomName } });
-//   return new Room(room.id, room.name);
 // }

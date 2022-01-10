@@ -1,4 +1,3 @@
-import { errorMonitor } from "events";
 import { ErrorAdapter } from "../../../../common/ErrorAdapter";
 import { UseCase } from "../../../../common/UseCase";
 import { RoomRepository } from "../../../../infrastructure/repository/RoomRepository";

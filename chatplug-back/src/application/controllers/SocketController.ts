@@ -35,7 +35,8 @@ export class SocketController {
             if(!user) throw new Error(`User ${id} does not exists : It should not append`);
             
             const room = await this.roomRepository.findRoom(roomData.name);
-        
+            if(!room) throw new Error(`Room ${roomData.name} does not exists : It should not append`);
+            
             console.log('user : ', user);
             const userAdmin = new User(0, 'admin', 'admin');
         
@@ -57,6 +58,7 @@ export class SocketController {
             if(!user) throw new Error(`User ${userId} does not exists : It should not append`);
 
             const room = await this.roomRepository.findRoom(roomData.name);
+            if(!room) throw new Error(`Room ${roomData.name} does not exists : It should not append`);
 
             console.log('user sending message : ', user);
             const messageToSend = await registerMessage(user, room, message);

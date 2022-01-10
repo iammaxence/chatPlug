@@ -4,11 +4,10 @@ import { ErrorUseCase } from "../../../../common/ErrorUseCase";
 import { UseCase } from "../../../../common/UseCase";
 import { RoomRepository } from "../../../../infrastructure/repository/RoomRepository";
 import { UserRepository } from "../../../../infrastructure/repository/UserRepository";
-import { RoomUseCaseDto } from "../../dto/RoomUseCaseDto";
 import { JoinRoomPort } from "../../port/JoinRoomPort";
 import { JoinRoomUseCaseResponse } from "./JoinRoomUseCaseResponse";
 
-export class JoinRoomUseCase implements UseCase<JoinRoomPort, RoomUseCaseDto> {
+export class JoinRoomUseCase implements UseCase<JoinRoomPort, JoinRoomUseCaseResponse> {
 
     roomRepository: RoomRepository;
     userRepository: UserRepository;
