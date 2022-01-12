@@ -1,19 +1,19 @@
 import { Server as SocketIoServer } from "socket.io";
 import { Socket } from "../../../node_modules/socket.io/dist";
 import { User } from "../../domains/User";
+import { MessageRepository } from "../../infrastructure/repository/MessageRepository";
 import { RoomRepository } from "../../infrastructure/repository/RoomRepository";
-import messageRepository from "../../infrastructure/repository/messageRepository";
 import { UserRepository } from "../../infrastructure/repository/UserRepository";
-
-const { registerMessage } = messageRepository;
 
 export class SocketController {
     userRepository: UserRepository;
     roomRepository: RoomRepository;
+    messageRepository: MessageRepository;
 
-    constructor(userRepository: UserRepository, roomRepository: RoomRepository) {
+    constructor(userRepository: UserRepository, roomRepository: RoomRepository, messageRepository: MessageRepository) {
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
+        this.messageRepository = messageRepository;
     }
 
     connexion(io: SocketIoServer) {
@@ -61,7 +61,7 @@ export class SocketController {
             if(!room) throw new Error(`Room ${roomData.name} does not exists : It should not append`);
 
             console.log('user sending message : ', user);
-            const messageToSend = await registerMessage(user, room, message);
+            const messageToSend = await this.messageRepository.createMessage(userId, room.getId(), message);
             console.log('Message to send : ', messageToSend);
             io.to(room.getId().toString()).emit('message', { user, messageToSend});
             console.log('To Room  : ', room.getId());

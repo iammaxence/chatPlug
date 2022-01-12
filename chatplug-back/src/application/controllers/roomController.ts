@@ -52,7 +52,6 @@ export class RoomController {
   }
 
   public async findRoom (req: Request, res: Response) {
-    // Adapter need to check and throw exception if roomName does not exists
     const adapter: FindRoomAdapter = new FindRoomAdapter({ roomName: req.query.roomName as string});
 
     const response: FindRoomUseCaseResponse = await this.findRoomUseCase.execute(adapter);

@@ -1,20 +1,21 @@
 import models from '../../application/db/setup/initModels';
 import { Message } from '../../domains/Message';
-import { Room } from '../../domains/Room';
-import { User } from "../../domains/User";
-const { messageModel } = models;
+import { UserUseCaseDto } from '../../domains/user/dto/UserUseCaseDto';
+const { messageModel, userModel } = models;
 
+export class MessageRepository {
 
-const registerMessage = async (user: User, room: Room, text: string ) => {
-  const userId = user.getId();
-  const roomId = room.getId();
+async createMessage(userId: number, roomId: number, text: string ) {
+
+  const userDB = await userModel.findOne({ where : { id: userId } });
+  const user = UserUseCaseDto.toDto(userDB);
+  if(!user) throw Error(`User ${userId} doesn\'t exists`);
+
   const message = {userId, roomId, text, date: new Date()}
 
-  const {id, date} = await messageModel.create(message)
-  
+  const {id, date} = await messageModel.create(message);
+
   return new Message(id, text, date, user);
 }
 
-export = {
-  registerMessage,
 }
