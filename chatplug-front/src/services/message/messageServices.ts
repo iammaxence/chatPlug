@@ -9,6 +9,7 @@ const getAllMessagesFromRoom = async (roomId: number) => {
     console.log('Response message : ', allMessagesFromRoomResponse);
     const allMessagesFromRoom = allMessagesFromRoomResponse.data
         .map(({ id, text, date, user}) => {
+            console.log('USER SERVICE : ', user);
             const userBuilt = new User(user.id, user.name, user.pseudo); 
            return new Message(id, text, date, userBuilt);
         });

@@ -13,7 +13,7 @@ return new User(idUser, name, pseudo);
 
 
 const getUserByEmail = async (email: string) => {
-  const userResponse = await axios.get<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/getUserByEmail?email="+email);
+  const userResponse = await axios.get<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/get-user-by-email?email="+email);
   
   const {id: idUser, name, pseudo} = userResponse.data;
   
@@ -28,7 +28,7 @@ const createUser = async (userPayload: {email: String, pseudo: String}) => {
     email,
     pseudo,
   }
-  const userResponse = await axios.post<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/createUser", payload);
+  const userResponse = await axios.post<{id: number, name: string, pseudo: string}>("http://localhost:8090/user/create-user", payload);
   
   //add presenter
   return userResponse;
@@ -38,7 +38,7 @@ const createUser = async (userPayload: {email: String, pseudo: String}) => {
 
 const exists = async (email: String) => {
 
-  const {data: isUserAlreadyExists} = await axios.get<boolean>("http://localhost:8090/user/exists?email="+email);
+  const {data: isUserAlreadyExists} = await axios.get<boolean>("http://localhost:8090/user/user-exists?email="+email);
 
   //add presenter
   return isUserAlreadyExists;

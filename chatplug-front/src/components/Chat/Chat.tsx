@@ -67,37 +67,37 @@ const Chat = ({ location }: Props) => {
   useEffect(() => {
    
     //Get user
-    let idUser = -1;
-    if(user) {
-      idUser = user.getId();
-    }
-    // Get all the messages from a room
-    socket = io(ENDPOINT);
-
-    if(room) {
-      getAllMessagesFromRoom(room.getId()).then((allMessages: any) => setMessages(allMessages));
-      socket.emit('join', {id: idUser, room});
-    }
+  
+    if(user && room) {
     
-    // console.log('EXECUTE 1 FOIS');
-    return () => {
-      //socket.disconnect();
-      socket.off();
+      // Get all the messages from a room
+      socket = io(ENDPOINT);
+
+      getAllMessagesFromRoom(room.getId()).then((allMessages: any) => setMessages(allMessages));
+      socket.emit('join', {id: user.getId(), room});
+    
+      // console.log('EXECUTE 1 FOIS');
+      return () => {
+        //socket.disconnect();
+        socket.off();
+      }
     }
 
   },[ENDPOINT, user, room])
 
   useEffect(() => { 
-    socket.once('message', ({user, messageToSend}) => {
-      const {id, name, pseudo} = user;
-      const userEmitter = new User(id, name, pseudo); 
-      const { text, date } = messageToSend;
-    
-      const newMessage = {user: userEmitter, text, date};
-      console.log('NEW MESSAGE : ', newMessage);
-      setMessages([...messages, newMessage])
-    })
-  }, [messages])
+    if(user && room) {
+      socket.once('message', ({user, messageToSend}) => {
+        const {id, name, pseudo} = user;
+        const userEmitter = new User(id, name, pseudo); 
+        const { text, date } = messageToSend;
+      
+        const newMessage = {user: userEmitter, text, date};
+        console.log('NEW MESSAGE : ', newMessage);
+        setMessages([...messages, newMessage])
+      })
+    }
+  }, [messages, user, room])
 
   const sendMessage = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
