@@ -26,21 +26,13 @@ export class CreateMessageUseCase implements UseCase<CreateMessagePort, CreateMe
         const roomExists = await this.roomRepository.roomExistsById(roomId);
 
         if(!userExists) {
-            this.userDoNotExists(userId);
-        } else if(roomExists) {
-            this.roomDoNotExists(roomId);
+            return this.userDoNotExists(userId);
+        } else if(!roomExists) {
+           return this.roomDoNotExists(roomId);
         } else {
-
+            const createdMessage = await this.messageRepository.createMessage(userId, roomId, text);
+            return new CreateMessageUseCaseResponse({ createdMessage });
         }
-
-        if(!userId || !roomId || !text) {
-            const status_code = 400 
-            const error_message =  ErrorAdapter.parameters(CreateMessageUseCase.name, [userId, roomId, text]);
-            return new CreateMessageUseCaseResponse({status_code, error_message});
-        }
-        const createdMessage = await this.messageRepository.createMessage(userId, roomId, text);
-              
-        return new CreateMessageUseCaseResponse({ createdMessage });
     }
 
     checkParameters(port?: CreateMessagePort) {

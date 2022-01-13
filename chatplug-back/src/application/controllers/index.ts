@@ -1,5 +1,6 @@
 import { ResponseHandler } from "../../common/ResponseHandler";
 import { CreateMessageUseCase } from "../../domains/message/useCase/createMessageUseCase/CreateMessageUseCase";
+import { GetAllMessagesFromRoomUseCase } from "../../domains/message/useCase/getAllMessagesFromRoomUseCase/GetAllMessagesFromUseCase";
 import { CreateRoomUseCase } from "../../domains/room/useCase/CreateRoomUseCase/CreateRoomUseCase";
 import { FindRoomUseCase } from "../../domains/room/useCase/findRoomUseCase/FindRoomUseCase";
 import { JoinRoomUseCase } from "../../domains/room/useCase/joinRoomUseCase/JoinRoomUseCase";
@@ -36,6 +37,7 @@ const findRoomUseCase = new FindRoomUseCase(roomRepository);
 
 //message use case
 const createMessageUseCase = new CreateMessageUseCase(messageRepository, userRepository, roomRepository);
+const getAllMessagesFromRoomUseCase = new GetAllMessagesFromRoomUseCase(messageRepository, roomRepository);
 
 // Controller
 const socketController = new SocketController(
@@ -62,6 +64,7 @@ const roomController = new RoomController(
 const messageController = new MessageController(
     responseHandler,
     createMessageUseCase,
+    getAllMessagesFromRoomUseCase,
 )
 
 export = {

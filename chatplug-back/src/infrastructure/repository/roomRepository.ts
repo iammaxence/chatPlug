@@ -6,44 +6,38 @@ const { userRoomModel, roomModel } = models;
 
 export class RoomRepository {
 
-  public async createRoom(roomName: string) {
+  public async createRoom(roomName: string): Promise<Room|null> {
     const responseRoom = await roomModel.create({ name: roomName });
     
     return RoomUseCaseDto.toDto(responseRoom);
   }
 
-  public async joinRoom(roomId: number, userId:number) {
+  public async joinRoom(roomId: number, userId:number): Promise<boolean> {
     const [room, created] = await userRoomModel.findOrCreate({ where: { roomId, userId }});
     
     return created;
   }
 
-  public async roomExistsById(id: number) {
-    const room = await roomModel.count({ where: {id}});
+  public async roomExistsById(id: number): Promise<boolean> {
+    const room = await roomModel.count({ where: { id }});
     return !!room;
   }
 
-  public async findRoom(roomName: string) {
+  public async findRoom(roomName: string): Promise<Room|null> {
     const responseRoom = await roomModel.findOne({ where : { name: roomName } });
     return RoomUseCaseDto.toDto(responseRoom);
   }
 
-  public async userHasJoinedRoom(roomId: number, userId:number) {
-    
-    return true;
+  public async userHasJoinedRoom(roomId: number, userId:number): Promise<boolean> {
+
+    const room = await userRoomModel.count({
+      where: {
+        roomId,
+        userId
+      }
+    })
+
+    return !!room; 
   }
 
 }
-
-// const userHasJoinedRoom =  async (roomId: number, userId:number) => {
-//   const userRoom = { roomId, userId}
-
-//   const room = await userRoomModel.count({
-//     where: {
-//       roomId,
-//       userId
-//     }
-//   })
-
-//   return !!room; 
-// }
