@@ -1,56 +1,55 @@
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// Keycloak
+import { KeycloakConfig } from './configuration/keycloak/KeycloakConfig';
+
 // Authentication lib 
-import Keycloak, { KeycloakOnLoad } from 'keycloak-js';
 import jwt_decode from "jwt-decode";
 
 // Main componenent
-import App from './App';
+import ChatPlug from './ChatPlug';
 
 //redux
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import userReducer from './reducer/userReducer';
+import { StoreConfig } from './configuration/storeConfig/StoreConfig';
 
 //services
 import allService from './services/index'
 import { User } from './components/domain/user/User';
 const { userService } = allService;
 
-let initOptions = {
-    url: 'http://localhost:8080/auth', realm: 'nami', clientId: 'nami-app', onLoad: 'login-required' as KeycloakOnLoad
+const keycloak = KeycloakConfig.initialise();
+
+const store = StoreConfig.initialise();
+
+const initialiseUser = async (token: string) => {
+    var { email }: {email : string } = jwt_decode( token );
+        
+    const isUserAlreadyExists = await userService.exists(email);
+
+    if(!isUserAlreadyExists) {
+        console.log('Registration of user : '+ email);
+        return userService.createUser({ email, pseudo: 'test'})
+    }
+    else {
+       return userService.getUserByEmail(email);
+    }
 }
 
-let keycloak = Keycloak(initOptions);
-
-const store = createStore(userReducer);
-
-keycloak.init({ onLoad: initOptions.onLoad }).then(async (auth) => {
+keycloak.init({ onLoad: KeycloakConfig.initOptions.onLoad }).then(async (auth) => {
 
     let user: User|null = null;
 
-    if (!auth) {
+    if (!auth)
         window.location.reload();
-    } else {
-        console.log("Keycloak Authenticated");
+   
+    console.log("Keycloak Authenticated");
+    user = await initialiseUser( keycloak.token as string );
 
-        var { email }: {email : string } = jwt_decode( keycloak.token!);
-        
-        const isUserAlreadyExists = await userService.exists(email);
-
-        if(!isUserAlreadyExists) {
-            console.log('Registration of user : '+ email);
-            await userService.createUser({ email, pseudo: 'test'})
-        }
-        else {
-            user = await userService.getUserByEmail(email);
-        }
-    }
-    
     ReactDOM.render(
         <Provider store={store}>
-            <App user={user}/>
+            <ChatPlug user={user}/>
         </Provider>,
         document.querySelector('#root')
     );

@@ -7,7 +7,7 @@ type Props = {
 }
 
 const RoomInfo = ({room, nbconnectedUsers}: Props) => {
-
+  
   return (
     <div className="flex flex-col p-2 bg-gray-500">
       <div className="text-2xl flex items-center">

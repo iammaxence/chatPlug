@@ -16,7 +16,7 @@ const Message = ({message: {user, text}, currentUser}: Props) => {
   const isSendByCurrentUser = () => {
     if(user.getId() === currentUser.getId()) {
       return (
-        <div className="flex flex-col items-end mx-2" >
+        <div className="flex flex-col items-end m-2" >
         <div>
           <p> { user.getPseudo() } </p>
         </div>

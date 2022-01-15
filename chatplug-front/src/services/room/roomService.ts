@@ -8,7 +8,7 @@ const createRoom = async (roomName: string) => {
     return new Room(id, name);
 }
 
-const getRoomByName = async (roomName: string) => {
+const getRoomByName = async (roomName: string): Promise<Room|null> => {
     const roomDataResponse = await axios.get<{id: number, name: string}|null>("http://localhost:8090/room/get-room?roomName="+roomName);
     if(roomDataResponse && roomDataResponse.data) {
         const { id , name } = roomDataResponse.data

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [roomName, setRoomName] = useState('');
+  const title = "ChatPlug";
 
   return (
     <div> 
@@ -10,7 +11,7 @@ const Home = () => {
         <span
           className="font-home text-5xl"
         >
-          ChatPlug
+          { title }
         </span>
         <div className="my-16 space-x-6">
           <input 
@@ -19,15 +20,12 @@ const Home = () => {
             type='text' placeholder="Ecris le nom d'un salon pour y accéder"
             onChange={(event) => setRoomName(event.target.value) }
           />
-          <Link onClick={ event => (!roomName) && event.preventDefault() } to={{pathname: '/chat', state: { data: {roomName}}}}>
+          <Link
+            onClick={ event => (!roomName) && event.preventDefault() }
+            to={{pathname: `/chat/${roomName}`, state: { data: {roomName}}}}>
             <button type="submit">Let's go</button>
           </Link>
         </div>
-        {/* <input type='text' placeholder='roomId' onChange={(event) => setRoomId(+event.target.value) } />
-        <input type='text' placeholder='roomName' onChange={(event) => setRoomName(event.target.value) } />
-        <Link onClick={ event => (!roomId) ? event.preventDefault() : null } to={{pathname: '/chat', state: { data: {room: {id: roomId, name: roomName}}}}}>
-          <button type="submit">Let's go</button>
-        </Link> */}
       </div>
     </div>
   )

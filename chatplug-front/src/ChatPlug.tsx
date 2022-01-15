@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import Chat from './components/Chat/Chat';
@@ -11,8 +10,7 @@ type Props = {
   user: User|null;
 }
 
-const App = ({ user }: Props) => {
-
+const ChatPlug = ({ user }: Props) => {
 
   const dispatch = useDispatch();
   dispatch({type: user});
@@ -20,8 +18,8 @@ const App = ({ user }: Props) => {
   return (
       <Router>
         <Route path='/' exact component={ Home } />
-        <Route path='/chat' component={ Chat } />
+        <Route path='/chat/:roomName' component={ Chat } />
       </Router>
   );
 }
-export default App;
+export default ChatPlug;
