@@ -16,10 +16,14 @@ const ChatPlug = ({ user }: Props) => {
   dispatch({type: user});
 
   return (
+    <div
+      className="h-screen w-screen bg-primary"
+    >
       <Router>
         <Route path='/' exact component={ Home } />
         <Route path='/chat/:roomName' component={ Chat } />
       </Router>
+    </div>
   );
 }
 export default ChatPlug;

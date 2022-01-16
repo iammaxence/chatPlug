@@ -98,7 +98,6 @@ const Chat = ({ match }: Props) => {
     return (
       <div className="flex flex-col justify-between h-screen">
         <section className="flex flex-col fixed w-full">
-          <h1 className="mx-auto text-2xl"> My chat plug</h1>
           <RoomInfo room={room} nbconnectedUsers={nbconnectedUsers}/>
         </section>
         <section className="flex flex-col-reverse mt-24 overflow-auto">
