@@ -1,5 +1,5 @@
 import React from 'react';
-import { Room } from '../domain/user/Room';
+import { Room } from '../domain/Room';
 
 type Props = {
   room: Room,

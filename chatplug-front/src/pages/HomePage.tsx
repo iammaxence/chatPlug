@@ -1,6 +1,6 @@
-import SearchBar from "./SearchBar/SearchBar";
+import SearchBar from "../components/SearchBar/SearchBar";
 
-const Home = () => {
+const HomePage = () => {
   const title = "ChatPlug";
 
   return (
@@ -20,4 +20,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default HomePage;

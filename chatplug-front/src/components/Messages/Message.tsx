@@ -1,5 +1,4 @@
-import React from 'react';
-import { User } from '../domain/user/User';
+import { User } from '../domain/User';
 
 type TypeMessage = {
   user: User;
@@ -14,36 +13,19 @@ type Props = {
 const Message = ({message: {user, text}, currentUser}: Props) => {
 
   const isSendByCurrentUser = () => {
-    if(user.getId() === currentUser.getId()) {
       return (
-        <div className="flex flex-col items-end m-2" >
-        <div>
-          <p> { user.getPseudo() } </p>
-        </div>
-        <div className="flex flex-col p-2 rounded-lg rounded-br-none bg-blue-300 text-black" >
-          <p> { text } </p>
-        </div>
-      </div>
-      );
-    }
-    else if (user.getPseudo() === 'admin') {
-      return (
-        <div className="flex flex-col items-center w-full bg-gray-600 ">
-          <p className=""> { text } </p>
-        </div>
-      )
-    } else {
-      return (
-        <div className="flex flex-col items-start mx-2" >
-          <div>
-            <p> { user.getPseudo() } </p>
-          </div>
-          <div className="flex flex-col p-2 rounded-lg rounded-bl-none bg-gray-300 text-black" >
-            <p> { text } </p>
+        <div className="flex items-start mx-2 my-4" >
+          <div className="flex p-2 rounded-lg rounded-bl-none bg-gray-300 text-black" >
+            <div className= "h-12 w-12 border-2 border-white">
+              picture
+            </div>
+            <div className='mx-2'>
+              <p className="relative -top-1.5"> { user.getPseudo() } </p>
+              <p> { text } </p>
+            </div>
           </div>
         </div>
       )
-    }
   }
 
  return (

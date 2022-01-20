@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import io, { Socket } from 'socket.io-client';
-import { User } from "../domain/user/User";
-import Messages from "../Messages/Messages";
-import RoomInfo from '../Room/RoomInfo';
-import SendMessageBar from "../SendMessageBar/SendMessageBar";
+import { User } from "../components/domain/User";
+import Messages from "../components/Messages/Messages";
+import RoomInfo from '../components/Room/RoomInfo';
+import SendMessageBar from "../components/SendMessageBar/SendMessageBar";
 import { useSelector } from "react-redux";
-import allServices from "../../services";
-import { Room } from "../domain/user/Room";
+import allServices from "../services";
+import { Room } from "../components/domain/Room";
 
 const { roomService , messageService } = allServices;
 
@@ -24,7 +24,7 @@ type TypeMessage = {
 
 let socket: Socket;
 
-const Chat = ({ match }: Props) => {
+const ChatPage = ({ match }: Props) => {
   
   const { user } = useSelector((state: any) => (state));
 
@@ -118,4 +118,4 @@ const Chat = ({ match }: Props) => {
   }
 }
 
-export default Chat;
+export default ChatPage;

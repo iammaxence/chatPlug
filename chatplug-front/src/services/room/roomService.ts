@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Room } from "../../components/domain/user/Room";
+import { Room } from "../../components/domain/Room";
 
 const createRoom = async (roomName: string) => {
     const roomDataResponse = await axios.post<{id: number, name: string}>("http://localhost:8090/room/create-room", { roomName });

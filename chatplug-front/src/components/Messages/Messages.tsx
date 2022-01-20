@@ -1,5 +1,5 @@
 import React, { useEffect }  from "react";
-import { User } from "../domain/user/User";
+import { User } from "../domain/User";
 import Message from './Message'
 
 

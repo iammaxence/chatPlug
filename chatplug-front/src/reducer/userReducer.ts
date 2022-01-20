@@ -1,4 +1,4 @@
-import { User } from "../components/domain/user/User";
+import { User } from "../components/domain/User";
 
 
 const userState = {

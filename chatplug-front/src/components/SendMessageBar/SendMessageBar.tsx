@@ -15,7 +15,7 @@ const SendMessageBar = ({message, setMessage, sendMessage}: Props) => {
         type="text" 
         placeholder="Write a message..."
         className="flex-1 w-72 p-2 rounded-lg focus:outline-none focus:placeholder-white-200 text-white
-        placeholder-gray-600 bg-gray-900"
+        placeholder-gray-600 bg-gray-900 border-2 border-white focus:ring-1 focus:ring-blue-300"
         value={message}
         onChange={(event) => setMessage(event.target.value)}
         onKeyPress={(event) => event.key === 'Enter' && sendMessage(event)}
