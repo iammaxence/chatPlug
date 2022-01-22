@@ -37,7 +37,7 @@ const initialiseUser = async (token: string) => {
     }
 }
 
-keycloak.init({ onLoad: KeycloakConfig.initOptions.onLoad }).then(async (auth) => {
+keycloak.init({ onLoad: KeycloakConfig.initOptions.onLoad, checkLoginIframe: false }).then(async (auth) => {
 
     let user: User|null = null;
 

@@ -1,5 +1,7 @@
-import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { Room } from '../domain/Room';
+import backLogo from '../../assets/back.png';
+
 
 type Props = {
   room: Room,
@@ -7,18 +9,24 @@ type Props = {
 }
 
 const RoomInfo = ({room, nbconnectedUsers}: Props) => {
+  const history = useHistory();
+
+  const goToHomePage = () => {
+    history.push(`/`);
+  }
   
   return (
-    <div className="flex flex-col p-2 bg-gray-500">
-      <div className="text-2xl flex items-center">
-        <span className="mr-3">{room.getName() }</span>
-        <span className="text-green-500">
-            <svg width="10" height="10">
-              <circle cx="5" cy="5" r="5" fill="currentColor"></circle>
-            </svg>
-        </span>
+    <div className="flex justify-between p-2 bg-gray-500">
+      <div className="flex flex-col">
+        <span className="mr-3 text-2xl">{room.getName() }</span>
+        <span className="text-sm">{ nbconnectedUsers } people online</span>
       </div>
-      <span className="text-sm">{ nbconnectedUsers } people online</span>
+      <button
+        className='mx-6'
+        onClick={goToHomePage}
+      >
+        <img className= "h-8 w-8" src={backLogo} alt="pic" />
+      </button>
     </div>
   )
 }

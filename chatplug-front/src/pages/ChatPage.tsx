@@ -60,7 +60,6 @@ const ChatPage = ({ match }: Props) => {
       getAllMessagesFromRoom(room.getId()).then((allMessages: any) => setMessages(allMessages));
       socket.emit('join', {id: user.getId(), room});
     
-      // console.log('EXECUTE 1 FOIS');
       return () => {
         //socket.disconnect();
         socket.off();
@@ -77,7 +76,6 @@ const ChatPage = ({ match }: Props) => {
         const { text, date } = messageToSend;
       
         const newMessage = {user: userEmitter, text, date};
-        console.log('NEW MESSAGE : ', newMessage);
         setMessages([...messages, newMessage])
       })
     }
@@ -100,7 +98,7 @@ const ChatPage = ({ match }: Props) => {
         <section className="flex flex-col fixed w-full">
           <RoomInfo room={room} nbconnectedUsers={nbconnectedUsers}/>
         </section>
-        <section className="flex flex-col-reverse mt-24 overflow-auto">
+        <section className="flex flex-col-reverse mt-20 overflow-auto">
           <Messages messages={ messages } user={ user }/>  
         </section>
         <section className="bottom-0">

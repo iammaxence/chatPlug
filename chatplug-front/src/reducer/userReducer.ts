@@ -13,8 +13,6 @@ const userReducer = (state = userState, action: any) => {
             user: userState.user
         };
     }
-    console.log('state user : ', state);
-
     return state;
 }
 

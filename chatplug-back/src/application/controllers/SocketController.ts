@@ -37,7 +37,6 @@ export class SocketController {
             const room = await this.roomRepository.findRoom(roomData.name);
             if(!room) throw new Error(`Room ${roomData.name} does not exists : It should not append`);
             
-            // console.log('user : ', user);
             // const userAdmin = new User(0, 'admin', 'PENDING');
         
             // socket.emit('message', {user: userAdmin, messageToSend: `welcome ${user.getPseudo()} to ${room.getName()}`})

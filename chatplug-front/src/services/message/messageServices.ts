@@ -6,10 +6,9 @@ import { User } from "../../components/domain/User";
 const getAllMessagesFromRoom = async (roomId: number) => {
     const allMessagesFromRoomResponse = await axios
         .get<{ id: number, text: string, date: Date, user: {id: number, pseudo:string, status:string}}[]>("http://localhost:8090/message/room-messages?roomId="+roomId);
-    console.log('Response message : ', allMessagesFromRoomResponse);
+    
     const allMessagesFromRoom = allMessagesFromRoomResponse.data
         .map(({ id, text, date, user}) => {
-            console.log('USER SERVICE : ', user);
             const userBuilt = new User(user.id, user.pseudo, user.status); 
            return new Message(id, text, date, userBuilt);
         });
