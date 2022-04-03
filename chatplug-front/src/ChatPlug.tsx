@@ -17,7 +17,7 @@ const ChatPlug = ({ user }: Props) => {
 
   return (
     <div
-      className="h-screen w-screen bg-primary"
+      className="h-screen w-screen bg-latte"
     >
       <Router>
         <Route path='/' exact component={ HomePage } />

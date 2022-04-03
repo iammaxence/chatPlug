@@ -13,9 +13,9 @@ const SendMessageBar = ({message, setMessage, sendMessage}: Props) => {
     >
       <input 
         type="text" 
-        placeholder="Write a message..."
-        className="flex-1 w-72 p-2 rounded-lg focus:outline-none focus:placeholder-white-200 text-white
-        placeholder-gray-600 bg-gray-900 border-2 border-white focus:ring-1 focus:ring-blue-300"
+        placeholder="Ecris un message..."
+        className="flex-1 w-72 p-2 rounded-lg focus:outline-none focus:placeholder-white-200 text-charcoal
+        placeholder-charcoal bg-white border focus:ring-1 focus:ring-blossom"
         value={message}
         onChange={(event) => setMessage(event.target.value)}
         onKeyPress={(event) => event.key === 'Enter' && sendMessage(event)}
@@ -23,8 +23,8 @@ const SendMessageBar = ({message, setMessage, sendMessage}: Props) => {
       <button
           type="button"
           className="rounded-lg h-12 w-16 mx-2
-            transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400
-            focus:outline-none border border-blue-500"
+            transition duration-500 ease-in-out text-charcoal hover:bg-latte
+            focus:outline-none border border-charcoal"
           onClick={(event) => sendMessage(event)}
           >
             Send

@@ -14,7 +14,7 @@ const SearchBar = () => {
         <div className="my-16 space-x-4">
           <input 
             className="w-72 h-9 rounded-lg shadow-md border border-black-500
-            focus:outline-none focus:ring-2 focus:ring-blue-300"
+            focus:outline-none focus:ring-2 focus:ring-blossom"
             type='text' placeholder="Ecris le nom d'un salon pour y accéder"
             onChange={(event) => setRoomName(event.target.value) }
             onKeyPress={(event) => handleKeypress(event)}
@@ -23,7 +23,7 @@ const SearchBar = () => {
             onClick={ event => (!roomName) && event.preventDefault() }
             to={{pathname: `/chat/${roomName}`}}>
             <button
-              className="w-12 h-9 shadow-md rounded-lg border border-black-500 bg-white"
+              className="w-12 h-9 shadow-md rounded-lg border border-black-500 bg-white text-forest"
               type="submit"
             >
               Go

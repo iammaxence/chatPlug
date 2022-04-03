@@ -24,13 +24,18 @@ const keycloak = KeycloakConfig.initialise();
 const store = StoreConfig.initialise();
 
 const initialiseUser = async (token: string) => {
-    var { email }: {email : string } = jwt_decode( token );
+    console.log('token : ',  jwt_decode( token ));
+    const decoded_token: any  = jwt_decode( token );
+
+    const { email }: {email: string}  = decoded_token;
         
     const isUserAlreadyExists = await userService.exists(email);
 
     if(!isUserAlreadyExists) {
         console.log('Registration of user : '+ email);
-        return userService.createUser({ email, pseudo: 'test'})
+        const { preferred_username: pseudo }: {preferred_username: string} = decoded_token;
+
+        return userService.createUser({ email, pseudo })
     }
     else {
        return userService.getUserByEmail(email);

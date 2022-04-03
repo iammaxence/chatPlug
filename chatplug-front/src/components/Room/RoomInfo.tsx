@@ -16,9 +16,9 @@ const RoomInfo = ({room, nbconnectedUsers}: Props) => {
   }
   
   return (
-    <div className="flex justify-between p-2 bg-gray-500">
+    <div className="flex justify-between p-2 border-b-2 border-charcoal bg-latte">
       <div className="flex flex-col">
-        <span className="mr-3 text-2xl">{room.getName() }</span>
+        <span className="mr-3 text-forest text-2xl">{room.getName() }</span>
         <span className="text-sm">{ nbconnectedUsers } people online</span>
       </div>
       <button

@@ -9,6 +9,19 @@ module.exports = {
         },
         custom_gray: {
           DEFAULT: '#27292E'
+        },
+        forest: {
+          DEFAULT: '#205613',
+          light: '#9ddb8f',
+        },
+        latte: {
+          DEFAULT: '#FFF9e8'
+        },
+        blossom: {
+          DEFAULT: '#F6D3D6'
+        },
+        charcoal: {
+          DEFAULT: '#232321'
         }
       }
     },
