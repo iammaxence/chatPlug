@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import ChatPage from './pages/ChatPage';
 import HomePage from './pages/HomePage';
+import UserPage from './pages/UserPage';
+
 import { useDispatch } from 'react-redux';
 
 import { User } from './components/domain/User';
@@ -21,6 +23,7 @@ const ChatPlug = ({ user }: Props) => {
     >
       <Router>
         <Route path='/' exact component={ HomePage } />
+        <Route path='/user' component={ UserPage } />
         <Route path='/chat/:roomName' component={ ChatPage } />
       </Router>
     </div>

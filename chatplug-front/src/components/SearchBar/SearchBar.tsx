@@ -1,36 +1,26 @@
 import { Link, useHistory } from 'react-router-dom';
 import { useState } from "react";
 
-const SearchBar = () => {
-  const [roomName, setRoomName] = useState('');
-  const history = useHistory();
+type Props = {
+  setValue: any;
+  eventKeyPress: any;
+  placeholder: string;
+  className: string;
+}
 
-  const handleKeypress = (event: any) => {
-      if(roomName && event.key === 'Enter') 
-        history.push(`/chat/${roomName}`);
-  }
+const SearchBar = ({ className, setValue, eventKeyPress, placeholder }: Props) => {
 
-    return (
-        <div className="my-16 space-x-4">
-          <input 
-            className="w-72 h-9 rounded-lg shadow-md border border-black-500
-            focus:outline-none focus:ring-2 focus:ring-blossom"
-            type='text' placeholder="Ecris le nom d'un salon pour y accéder"
-            onChange={(event) => setRoomName(event.target.value) }
-            onKeyPress={(event) => handleKeypress(event)}
-          />
-          <Link
-            onClick={ event => (!roomName) && event.preventDefault() }
-            to={{pathname: `/chat/${roomName}`}}>
-            <button
-              className="w-12 h-9 shadow-md rounded-lg border border-black-500 bg-white text-forest"
-              type="submit"
-            >
-              Go
-            </button>
-          </Link>
-        </div>
-    );
+  return (
+      <div className={className}>
+        <input 
+          className="pl-2 w-72 h-9 rounded-lg shadow-md border border-black-500
+          focus:outline-none focus:ring-2 focus:ring-blossom"
+          type='text' placeholder={placeholder}
+          onChange={(event) => setValue(event.target.value) }
+          onKeyPress={(event) => eventKeyPress(event)}
+        />
+      </div>
+  );
 }
 
 export default SearchBar;
