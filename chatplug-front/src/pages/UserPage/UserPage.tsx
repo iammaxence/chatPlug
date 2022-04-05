@@ -1,24 +1,29 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import defaultLogo from "../assets/animeguy.jpg";
-import configLogo from "../assets/settings.png";
-import SearchBar from "../components/SearchBar/SearchBar";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import ChatListOverview from "./components/ChatOverview";
+import UserInfo from "./components/UserInfo";
 
 const UserPage = () => {
-    const { user } = useSelector((state: any) => (state));
-
     const [searchValue, setSearchValue] = useState('');
+
+    const chatList = [
+        {
+            id: 1,
+            name: 'lesboss',
+            description: 'Un channel qui regroupe que les boss'
+        },
+        {
+            id: 2,
+            name: 'lafrance',
+            description: 'Un channel qui regroupe une communauté francophone'
+        },
+    ]
 
     return (
         <div className="flex h-full">
            <div className="container px-4 w-96 border-r-2 border-charcoal">
-            <div className= "flex items-center my-4 justify-between">
-                <div className="flex items-center space-x-4">
-                    <img className= "h-12 w-12 border-2 rounded-lg" src={defaultLogo} alt="pic" />
-                    <span>{user.pseudo}</span>
-                </div>
-                <img className= "h-5 w-5 rounded-lg" src={configLogo} alt="pic" />
-            </div>
+            <UserInfo />
             <SearchBar
                 className="text-center"
                 setValue={searchValue}
@@ -26,10 +31,16 @@ const UserPage = () => {
                 placeholder="Recherche..."
             />
             <div className="py-6">
-                <span>Mes chats en favoris</span>
-            </div>
-            <div className="py-6" >
                 <span>Mes chats</span>
+                <ChatListOverview 
+                    chatList = {chatList}
+                />
+            </div>
+            <div>
+                <span>Historique des chats</span>
+                <ChatListOverview 
+                    chatList = {chatList}
+                />
             </div>
            </div>
            <div className="flex-1 border-r-2 border-charcoal">

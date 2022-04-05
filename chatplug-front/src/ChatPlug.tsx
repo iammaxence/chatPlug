@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import ChatPage from './pages/ChatPage';
 import HomePage from './pages/HomePage';
-import UserPage from './pages/UserPage';
+import UserPage from './pages/UserPage/UserPage';
 
 import { useDispatch } from 'react-redux';
 
