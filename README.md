@@ -3,6 +3,7 @@
 ChatPlug is a simple web chat using ReactJs and Nodejs
 
 ![capturechatplug0](https://user-images.githubusercontent.com/32987179/227960978-ee0ff4b8-6dc7-4960-a50e-52509fe4e0bd.png)
+![capturechatplug1](https://user-images.githubusercontent.com/32987179/227961203-305ef181-0b81-414a-b310-20197e8deaf6.png)
 
 
 In progress...
